@@ -1,0 +1,9 @@
+{
+    "extensions": [
+        "streetsidesoftware.code-spell-checker",
+        "codezombiech.gitignore",
+        "eamodio.gitlens",
+        "yzhang.markdown-all-in-one",
+        "esbenp.prettier-vscode"
+    ]
+}
