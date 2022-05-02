@@ -1,4 +1,4 @@
-# ExpressJS-TodoAPI
+# ExpressJS-NoteAPI
 
 ## Notes
 
