@@ -1,61 +1,56 @@
-const express = require("express");
 const mongoose = require("mongoose");
-const { initialize } = require("express-openapi");
-const swaggerUi = require("swagger-ui-express");
+const express = require("express");
+const cors = require("cors");
+
+const checkAuth = require("./middleware/middleware");
 
 const app = express();
+app.use(cors());
 
-app.use(express.json());
+const PORT = process.env.PORT || 8000;
+const dbURL = process.env.DB_URL || "mongodb://root:root@localhost:27017";
 
+const connectDB = async () => {
+    try {
+        const con = await mongoose.connect(dbURL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false,
+            // serverSelectionTimeoutMS: 2000,
+            dbName: "test",
+        });
+        console.log(`Connected to '${con.connection.name}' DB`);
+    } catch (err) {
+        console.log("DB Error : ", err.message);
+        process.exit();
+    }
+};
+
+connectDB();
+
+// To do JSON Parsing and handle JSON Parsing Error
 app.use((req, res, next) => {
-  console.log(req.method, req.url, res.statusCode);
-  next();
+    express.json()(req, res, (err) => {
+        if (err) {
+            return res
+                .status(err.status)
+                .send({ error: "Invalid data submitted." });
+        }
+        next();
+    });
 });
 
-const DB_URL = "mongodb://localhost:27017/test";
-const PORT = 3000;
-
-// Database Connection
-mongoose
-  .connect(DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("DB Connected");
-  })
-  .catch((err) => {
-    console.log("DB not Connected");
-    // process.exit();
-  });
-
-const TodoController = require("./controllers/todo");
-const UserController = require("./controllers/user");
-
-app.use("/todo", TodoController);
-app.use("/user", UserController);
-
-initialize({
-  app,
-  apiDoc: require("./api/api-doc"),
-  paths: "./api/paths",
+app.get("/", async (req, res) => {
+    res.send({ message: "Server Running ..." });
 });
 
-// OpenAPI UI
-app.use(
-  "/api-documentation",
-  swaggerUi.serve,
-  swaggerUi.setup(null, {
-    swaggerOptions: {
-      url: `http://localhost:${PORT}/api-docs`,
-    },
-  })
-);
+app.use("/api/todo", checkAuth, require("./todo/routes"));
+app.use("/api/user", require("./user/routes"));
 
 app.use((req, res) => {
-  res.status(404).json({ error: "Not Found" });
+    res.status(404).send({
+        message: "Invalid Path. This path does not Exists",
+    });
 });
 
-app.listen(PORT, () => {
-  console.log(`Serving on ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Serving on ${PORT}`));

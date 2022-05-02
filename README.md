@@ -1,7 +1,15 @@
-# 09-Server-ExpressJS-TodoAPI
+# ExpressJS-TodoAPI
+
+## Notes
 
 ```sh
-npm install
+# - Create Folder for docker data
+mkdir -p docker-data/mongodb_data
 
-npm start
+# - Start the mongodb server using docker-compose
+docker-compose up -d
+
+# Setting Up Server
+npm install
+npm run dev
 ```
