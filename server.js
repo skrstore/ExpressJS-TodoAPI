@@ -12,6 +12,14 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/version", (req, res) => {
+    res.json({
+        message: `Server :: ${NAME}`,
+        status: "success",
+        data: "v1.1",
+    });
+});
+
 app.get("/api/data", (req, res) => {
     res.json({
         message: `Server :: ${NAME}`,
