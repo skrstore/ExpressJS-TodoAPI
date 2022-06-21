@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT | 8080;
 const NAME = process.env.NAME;
 const OTHER_SERVER = process.env.OTHER_SERVER;
-const VERSION = process.env.VERSION || "v1.4";
+const VERSION = process.env.VERSION || "v1.5";
 
 app.use((req, res, next) => {
     console.log(`${req.method} : ${req.path}`);
