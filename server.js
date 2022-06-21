@@ -6,17 +6,26 @@ const app = express();
 const PORT = process.env.PORT | 8080;
 const NAME = process.env.NAME;
 const OTHER_SERVER = process.env.OTHER_SERVER;
+const VERSION = process.env.VERSION || "v1.4";
 
 app.use((req, res, next) => {
     console.log(`${req.method} : ${req.path}`);
     next();
 });
 
+app.get("/", (req, res) => {
+    res.status(200).json({
+        message: `Server :: ${NAME}`,
+        status: "success",
+        version: VERSION,
+    });
+});
+
 app.get("/version", (req, res) => {
     res.json({
         message: `Server :: ${NAME}`,
         status: "success",
-        data: "v1.4",
+        data: VERSION,
     });
 });
 
