@@ -16,7 +16,7 @@ app.get("/version", (req, res) => {
     res.json({
         message: `Server :: ${NAME}`,
         status: "success",
-        data: "v1.1",
+        data: "v1.2",
     });
 });
 
