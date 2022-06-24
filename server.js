@@ -7,9 +7,10 @@ const PORT = process.env.PORT | 8080;
 const NAME = process.env.NAME;
 const OTHER_SERVER = process.env.OTHER_SERVER;
 const VERSION = process.env.VERSION || "v1.5";
+const TYPE = process.env.TYPE || "Service";
 
 app.use((req, res, next) => {
-    console.log(`${req.method} : ${req.path}`);
+    console.log(`${req.hostname} : ${req.method} : ${req.path}`);
     next();
 });
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
         message: `Server :: ${NAME}`,
         status: "success",
         version: VERSION,
+        type: TYPE,
     });
 });
 
@@ -26,6 +28,7 @@ app.get("/version", (req, res) => {
         message: `Server :: ${NAME}`,
         status: "success",
         data: VERSION,
+        type: TYPE,
     });
 });
 
@@ -34,6 +37,7 @@ app.get("/api/data", (req, res) => {
         message: `Server :: ${NAME}`,
         status: "success",
         data: "No Data Available from other Server",
+        type: TYPE,
     });
 });
 
@@ -60,6 +64,7 @@ app.get("/api/call", async (req, res) => {
     res.json({
         message: `Server :: ${NAME}`,
         status: "success",
+        type: TYPE,
         data,
     });
 });
