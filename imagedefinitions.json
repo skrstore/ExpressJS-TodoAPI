@@ -1,0 +1,6 @@
+[
+    {
+        "name": "node-server-container",
+        "imageUri": "431795052832.dkr.ecr.ap-south-1.amazonaws.com/node-server:latest"
+    }
+]
