@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT | 8080;
 const NAME = process.env.NAME;
 const OTHER_SERVER = process.env.OTHER_SERVER;
-const VERSION = process.env.VERSION || "v1.8";
+const VERSION = process.env.VERSION || "v1.9";
 const TYPE = process.env.TYPE || "Service";
 
 app.use((req, res, next) => {
