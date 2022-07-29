@@ -7,7 +7,7 @@ const config = {
     port: process.env.PORT || 8080,
     name: process.env.NAME || "node-server",
     otherServer: process.env.OTHER_SERVER,
-    version: process.env.VERSION || "v3.3",
+    version: process.env.VERSION || "v4.0",
     type: process.env.TYPE,
 };
 
