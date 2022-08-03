@@ -1,0 +1,17 @@
+const express = require("express");
+
+const router = express.Router();
+
+router.get("/", (req, res) => {
+    res.send({ message: "Precise App" });
+});
+
+router.get("/login", (req, res) => {
+    res.send({ message: "Login" });
+});
+
+router.get("/register", (req, res) => {
+    res.send({ message: "Register" });
+});
+
+module.exports = router;

@@ -7,7 +7,7 @@ const config = {
     port: process.env.PORT || 8080,
     name: process.env.NAME || "node-server",
     otherServer: process.env.OTHER_SERVER,
-    version: process.env.VERSION || "v4.0",
+    version: process.env.VERSION || "v5.0",
     type: process.env.TYPE,
 };
 
@@ -54,6 +54,11 @@ app.get("/api/call", async (req, res) => {
         data,
     });
 });
+
+
+app.use("/predict", require('./routes/predict.route'))
+app.use("/precise", require('./routes/precise.route'))
+app.use("/connect", require('./routes/connect.route'))
 
 app.listen(config.port, () => {
     console.log(`Server ::${config.name} Running on ${config.port}`);
