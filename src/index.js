@@ -7,13 +7,16 @@ const config = {
     name: process.env.NAME,
     port: process.env.PORT || 8000,
     version: process.env.VERSION || "v0.1", // TODO: read from package.json
+    mongoDbURL:
+        process.env.MONGODB_URL || "mongodb://admin:admin@localhost:27017/",
 };
 
 // TODO: Look for third Party logger library to replace `console.log`
 
 const main = async () => {
     try {
-        await mongoose.connect("mongodb://admin:admin@localhost:27017/", {
+        await mongoose.connect(config.mongoDbURL, {
+            // TODO: read it from Environment Variable
             dbName: "test",
         });
         console.log("[MongoDB] Connected");

@@ -9,3 +9,12 @@ services:
         environment:
             MONGO_INITDB_ROOT_USERNAME: admin
             MONGO_INITDB_ROOT_PASSWORD: admin
+    server:
+        build: .
+        ports:
+            - 8000:8000
+        volumes:
+            - ./:/app/
+        environment:
+            - MONGODB_URL=mongodb://admin:admin@mongo:27017/
+
