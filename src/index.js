@@ -8,22 +8,19 @@ const config = {
     port: process.env.PORT || 8000,
     version: process.env.VERSION || "v0.1", // TODO: read from package.json
 };
+
+// TODO: Look for third Party logger library to replace `console.log`
+
 const main = async () => {
     try {
         await mongoose.connect("mongodb://admin:admin@localhost:27017/", {
             dbName: "test",
         });
         console.log("[MongoDB] Connected");
-        // const todo1 = new TodoModel({
-        //     title: "Todo 3",
-        // });
-        // let result = await todo1.save();
 
-        //  result = await TodoModel.find().lean();
-        //  result = await TodoModel.deleteMany();
+        app.use(express.json());
 
-        // console.log("RESULT ", result);
-
+        // TODO: Look for Exploring some third Party tool for request logger
         app.use((req, res, next) => {
             console.log(`${req.hostname} : ${req.method} : ${req.path}`);
             next();
@@ -33,11 +30,12 @@ const main = async () => {
             res.json({
                 message: `Server :: ${config.name}`,
                 version: config.version,
-                type: config.type,
             });
         });
 
-        app.use('/todo', require('./apps/todo/todo.routes'));
+        app.use("/todo", require("./apps/todo/todo.routes"));
+
+        app.use(handleError);
 
         app.listen(config.port, () => {
             console.log(`[Server] Listening on ${config.port}`);
@@ -46,5 +44,24 @@ const main = async () => {
         console.log("Error ", error);
     }
 };
+
+const handleError = (error, req, res, next) => {
+    // TODO: Explore more on - https://expressjs.com/en/guide/error-handling.html
+    console.log("[handleError] ", error.message);
+    return res.status(500).send({
+        message: error.message,
+        status: "fail",
+    });
+};
+
+process.on("unhandledRejection", (error) => {
+    console.log("[unhandledRejection] ", error);
+    process.exit(1);
+});
+
+process.on("uncaughtException", (error) => {
+    console.log("[uncaughtException] ", error);
+    process.exit(1);
+});
 
 main();
