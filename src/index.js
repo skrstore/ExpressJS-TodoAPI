@@ -9,21 +9,21 @@ const config = {
     version: process.env.VERSION || "v0.1", // TODO: read from package.json
     mongoDbURL:
         process.env.MONGODB_URL || "mongodb://admin:admin@localhost:27017/",
+    dbName: process.env.DB_NAME || "test"
 };
 
-// TODO: Look for third Party logger library to replace `console.log`
+// NOTE: Logger library to replace `console.log` - winston - https://www.npmjs.com/package/winston
 
 const main = async () => {
     try {
         await mongoose.connect(config.mongoDbURL, {
-            // TODO: read it from Environment Variable
-            dbName: "test",
+            dbName: config.dbName
         });
         console.log("[MongoDB] Connected");
 
         app.use(express.json());
 
-        // TODO: Look for Exploring some third Party tool for request logger
+        // NOTE: Request logging library - morgan - https://www.npmjs.com/package/morgan
         app.use((req, res, next) => {
             console.log(`${req.hostname} : ${req.method} : ${req.path}`);
             next();
