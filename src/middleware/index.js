@@ -1,12 +1,11 @@
 const express = require('express');
 const { verify } = require('jsonwebtoken');
-
-const jwtSecret = process.env.JWT_SECRET || 'secret';
+const { JWT_SECRET } = require('../config');
 
 const checkAuth = (req, res, next) => {
     try {
         const token = req.headers.authorization.split('Bearer ')[1];
-        req.user = verify(token, jwtSecret).user;
+        req.user = verify(token, JWT_SECRET).user;
         next();
     } catch (error) {
         res.status(401).json({ error: 'Invalid Token' });
@@ -23,7 +22,7 @@ const checkJson = (req, res, next) => {
                 .status(err.status)
                 .send({ error: 'Invalid data format.' });
         }
-        next();
+        return next();
     });
 };
 

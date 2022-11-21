@@ -9,12 +9,14 @@ const UserSchema = new Schema(
             type: String,
             required: true,
             minlength: 5,
+            unique: true,
             trim: true,
         },
         email: {
             type: String,
             required: true,
             trim: true,
+            unique: true,
             validate: emailRe,
         },
         password: {

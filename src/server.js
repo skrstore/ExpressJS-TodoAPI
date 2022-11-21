@@ -12,8 +12,9 @@ app.get('/', (req, res) => {
     res.send({ message: 'Server Running ...' });
 });
 
-app.use('/api/note', checkAuth, require('./apps/note/routes'));
-app.use('/api/user', require('./apps/user/routes'));
+app.use('/api/todo', checkAuth, require('./apps/todo/todo.routes'));
+app.use('/api/auth', require('./apps/auth/auth.routes'));
+app.use('/api/user', checkAuth, require('./apps/user/user.routes'));
 
 app.use(handleInvalidPath);
 

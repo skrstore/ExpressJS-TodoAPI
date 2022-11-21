@@ -1,6 +1,6 @@
-const { Schema, model, Types } = require("mongoose");
+const { Schema, model, Types } = require('mongoose');
 
-const NoteSchema = new Schema(
+const TodoSchema = new Schema(
     {
         title: {
             required: true,
@@ -18,4 +18,4 @@ const NoteSchema = new Schema(
     { timestamps: true }
 );
 
-module.exports = model("Note", NoteSchema);
+module.exports = model('Todo', TodoSchema);
