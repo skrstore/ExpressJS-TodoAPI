@@ -25,3 +25,15 @@ NAME=ExpressJS-TodoAPI
 PORT=8000
 VERSION=
 ```
+
+- Commands to Build Docker Images and Push to DockerHub
+
+```sh
+docker build -t skrmain/expressjs-todo-api .
+docker tag skrmain/expressjs-todo-api:latest skrmain/expressjs-todo-api:0.1
+
+# Docker Login
+
+docker push skrmain/expressjs-todo-api:latest
+docker push skrmain/expressjs-todo-api:0.1
+```

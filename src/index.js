@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 
 const app = express();
 
@@ -22,6 +23,7 @@ const main = async () => {
         console.log("[MongoDB] Connected");
 
         app.use(express.json());
+        app.use(cors());
 
         // NOTE: Request logging library - morgan - https://www.npmjs.com/package/morgan
         app.use((req, res, next) => {
