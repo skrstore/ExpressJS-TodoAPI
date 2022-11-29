@@ -1,6 +1,7 @@
 const express = require('express');
 const { verify } = require('jsonwebtoken');
-const { JWT_SECRET } = require('../config');
+
+const { JWT_SECRET, default: config } = require('../config');
 
 const checkAuth = (req, res, next) => {
     try {
@@ -32,4 +33,33 @@ const handleInvalidPath = (req, res) => {
     });
 };
 
-module.exports = { checkAuth, checkJson, handleInvalidPath };
+// eslint-disable-next-line no-unused-vars
+const handleError = (error, req, res, _next) => {
+    // TODO: Explore more on - https://expressjs.com/en/guide/error-handling.html
+    console.log('[handleError] ', error.message);
+    return res.status(500).send({
+        message: error.message,
+        status: 'fail',
+    });
+};
+
+const handleRoot = (req, res) => {
+    res.send({
+        message: `Server :: ${config.name}`,
+        version: config.version,
+    });
+};
+
+const logRequest = (req, res, next) => {
+    console.log(`${req.hostname} : ${req.method} : ${req.path}`);
+    next();
+};
+
+module.exports = {
+    checkAuth,
+    checkJson,
+    handleInvalidPath,
+    handleError,
+    handleRoot,
+    logRequest,
+};

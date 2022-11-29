@@ -1,4 +1,4 @@
-const { connectDB } = require('./utils');
+const { connectDB } = require('./shared/utils');
 const { PORT } = require('./config');
 const { app } = require('./server');
 
@@ -9,7 +9,8 @@ const main = async () => {
         await connectDB();
         app.listen(PORT, () => console.log(`[Server] Listening on ${PORT}`));
     } catch (error) {
-        console.log('Error ', error);
+        console.log('[Error] ', error);
+        process.exit(0);
     }
 };
 
