@@ -1,18 +1,13 @@
-const { Schema, default: mongoose } = require("mongoose");
+const { Schema, Types, default: mongoose } = require('mongoose');
 
 const STATUSES = {
-    created: "created",
-    done: "done",
-    deleted: "deleted",
+    created: 'created',
+    done: 'done',
+    deleted: 'deleted',
 };
 
-const todoSchema = new Schema(
+const TodoSchema = new Schema(
     {
-        status: {
-            type: String,
-            default: STATUSES.created,
-            enum: Object.values(STATUSES),
-        },
         title: {
             type: String,
             required: true,
@@ -21,11 +16,20 @@ const todoSchema = new Schema(
             type: String,
             required: false,
         },
+        userId: {
+            type: Types.ObjectId,
+            required: true,
+        },
+        status: {
+            type: String,
+            default: STATUSES.created,
+            enum: Object.values(STATUSES),
+        },
     },
     { timestamps: true }
-).post("save", function (doc) {
-    console.log("[Todo] Saved : ", doc._id);
+).post('save', function (doc) {
+    console.log('[Todo] Saved : ', doc._id);
 });
 
-module.exports.TodoModel = mongoose.model("Todo", todoSchema);
+module.exports.TodoModel = mongoose.model('Todo', TodoSchema);
 module.exports.STATUSES = STATUSES;
