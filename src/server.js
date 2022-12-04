@@ -16,6 +16,8 @@ app.use('/todo', middleware.checkAuth, require('./apps/todo/todo.routes'));
 app.use('/auth', require('./apps/auth/auth.routes'));
 app.use('/user', middleware.checkAuth, require('./apps/user/user.routes'));
 
+require('./apps/try/try.controller')(app);
+
 app.use(middleware.handleInvalidPath);
 app.use(middleware.handleError);
 

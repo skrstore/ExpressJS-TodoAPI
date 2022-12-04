@@ -37,3 +37,10 @@ docker tag skrmain/expressjs-todo-api:latest skrmain/expressjs-todo-api:0.1
 docker push skrmain/expressjs-todo-api:latest
 docker push skrmain/expressjs-todo-api:0.1
 ```
+
+## Version Notes
+
+- 0.1
+  - todo app without authentication
+- 02
+  - todo, user, auth app

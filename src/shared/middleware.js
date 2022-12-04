@@ -19,9 +19,7 @@ const checkAuth = (req, res, next) => {
 const checkJson = (req, res, next) => {
     express.json()(req, res, (err) => {
         if (err) {
-            return res
-                .status(err.status)
-                .send({ error: 'Invalid data format.' });
+            return res.status(err.status).send({ error: 'Invalid data format.' });
         }
         return next();
     });
