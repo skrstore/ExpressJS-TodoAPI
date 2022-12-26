@@ -13,4 +13,7 @@ const connectDB = async () => {
     }
 };
 
-module.exports = { connectDB };
+// TODO: add logic to handle 'message'
+const sendSuccessResponse = (data) => ({ data, status: 'success' });
+
+module.exports = { connectDB, sendSuccessResponse };

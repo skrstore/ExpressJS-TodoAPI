@@ -30,12 +30,8 @@ router.post('/login', async (req, res) => {
         const user = await getUserByEmailPassword(email, password);
 
         if (user) {
-            // In Hours
-            const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 1;
-            const token = sign(
-                { user: user.toObject(), exp: expiry },
-                JWT_SECRET
-            );
+            const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 1; // In Hours
+            const token = sign({ user: user.toObject(), exp: expiry }, JWT_SECRET);
             res.send({ message: 'Login Successful', data: { user, token } });
         } else {
             res.status(400).send({ error: 'Invalid Login Credentials' });
@@ -43,6 +39,11 @@ router.post('/login', async (req, res) => {
     } catch (error) {
         res.status(400).send({ error: error.message });
     }
+});
+
+// eslint-disable-next-line no-unused-vars
+router.get('/test', (req, res) => {
+    throw Error('My Error');
 });
 
 module.exports = router;
