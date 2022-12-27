@@ -1,47 +1,38 @@
-const express = require('express');
-const { sign } = require('jsonwebtoken');
+const { Router } = require('express');
 
-const { JWT_SECRET } = require('../../config');
+const { validateReqBody } = require('../../shared/middleware');
+const { createToken } = require('../../shared/utils');
 const { addUser, getUserByEmailPassword } = require('../user/user.controllers');
+const { registerVSchema, loginVSchema } = require('../user/user.validation');
 
-const router = express.Router();
+const router = Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register', validateReqBody(registerVSchema), async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
 
         await addUser(username, email, password);
 
-        res.send({ message: 'User Created' });
+        return res.send({ message: 'User Created' });
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        return next(error);
     }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', validateReqBody(loginVSchema), async (req, res, next) => {
     try {
-        let { email, password } = req.body;
-
-        email = email.trim();
-        password = password.trim();
-
-        if (!email || !password) throw new Error('Invalid Values Submitted');
+        const { email, password } = req.body;
 
         const user = await getUserByEmailPassword(email, password);
 
-        if (user) {
-            // In Hours
-            const expiry = Math.floor(Date.now() / 1000) + 60 * 60 * 1;
-            const token = sign(
-                { user: user.toObject(), exp: expiry },
-                JWT_SECRET
-            );
-            res.send({ message: 'Login Successful', data: { user, token } });
-        } else {
-            res.status(400).send({ error: 'Invalid Login Credentials' });
+        if (!user) {
+            res.status(400);
+            throw new Error('Invalid Credentials');
         }
+        const token = createToken({ user: user.toObject() });
+        return res.send({ message: 'Login Successful', data: { user, token } });
     } catch (error) {
-        res.status(400).send({ error: error.message });
+        return next(error);
     }
 });
 

@@ -3,6 +3,7 @@ const { PORT } = require('./config');
 const { app } = require('./server');
 
 // NOTE: Logger library to replace `console.log` - winston - https://www.npmjs.com/package/winston
+// TODO: Configure Prettier integration with ESLint
 
 const main = async () => {
     try {

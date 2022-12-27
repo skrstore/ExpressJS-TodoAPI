@@ -27,6 +27,7 @@ const TodoSchema = new Schema(
         },
     },
     { timestamps: true }
+    // eslint-disable-next-line prefer-arrow-callback, func-names
 ).post('save', function (doc) {
     console.log('[Todo] Saved : ', doc._id);
 });
