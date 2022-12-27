@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 const express = require('express');
-
+const { JsonWebTokenError } = require('jsonwebtoken');
 const {
-    Error: { ValidationError: MongoValidationError },
+    Error: { ValidationError: MValidationError, CastError: MCastError },
 } = require('mongoose');
 
 const config = require('../config');
@@ -10,12 +10,14 @@ const { verifyToken } = require('./utils');
 
 const checkAuth = (req, res, next) => {
     try {
+        if (!req.headers.authorization) {
+            res.status(400);
+            throw new Error("'authorization' token missing in header");
+        }
         const token = req.headers.authorization.split('Bearer ')[1];
         req.user = verifyToken(token).user;
         return next();
     } catch (error) {
-        res.status(401);
-        error.message = 'Invalid Token';
         return next(error);
     }
 };
@@ -44,11 +46,18 @@ const handleInvalidPath = (req, res) => {
 // eslint-disable-next-line no-unused-vars
 const handleError = (error, req, res, _next) => {
     // TODO: Explore more on - https://expressjs.com/en/guide/error-handling.html
-    if (error instanceof MongoValidationError) {
-        // NOTE: MongoDB Validation Error
+    if (error instanceof MValidationError) {
+        res.status(400);
         error.fullMessage = error.message;
         error.message = 'Invalid Input';
+    } else if (error instanceof JsonWebTokenError) {
+        res.status(401);
+        error.fullMessage = error.message;
+        error.message = 'Invalid Token';
+    } else if (error instanceof MCastError) {
         res.status(400);
+        error.fullMessage = error.message;
+        error.message = 'Invalid ID';
     }
     const statusCode = res.statusCode >= 400 ? res.statusCode : 500;
     console.log('[handleError] ', error.message);

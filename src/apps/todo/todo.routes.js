@@ -1,13 +1,11 @@
-/* eslint-disable no-underscore-dangle */
 const { Router } = require('express');
-const {
-    Error: { CastError },
-} = require('mongoose');
 
 const { TodoModel } = require('./todo.models');
 const todoSchema = require('./todo.validation');
 const { sendSuccessResponse } = require('../../shared/utils');
 const { validateReqBody } = require('../../shared/middleware');
+
+// IMPORTANT: TODO: add user authorization in all routes
 
 const router = Router();
 
@@ -27,7 +25,6 @@ router.get('/', async (req, res, next) => {
     }
 });
 
-// TODO: add user authorization
 router.get('/:id', async (req, res, next) => {
     try {
         const { id } = req.params;
@@ -44,54 +41,34 @@ router.get('/:id', async (req, res, next) => {
         }
         return res.send(sendSuccessResponse(todo));
     } catch (error) {
-        if (error instanceof CastError) {
-            res.status(400);
-            error.fullMessage = error.message;
-            error.message = 'Invalid ID';
-        }
         return next(error);
     }
 });
 
-// Add user authorization
 router.delete('/:id', async (req, res, next) => {
     try {
-        const { id } = req.params;
-
-        const todo = await TodoModel.findByIdAndDelete(id);
+        const todo = await TodoModel.findByIdAndDelete(req.params.id);
         if (!todo) {
             res.status(404);
             throw new Error('Does not exists.');
         }
         return res.send(sendSuccessResponse(todo));
     } catch (error) {
-        if (error instanceof CastError) {
-            res.status(400);
-            error.fullMessage = error.message;
-            error.message = 'Invalid ID';
-        }
         return next(error);
     }
 });
 
-// Add user authorization
 router.patch('/:id', validateReqBody(todoSchema), async (req, res, next) => {
     try {
-        const { id } = req.params;
         const { title, detail } = req.body;
 
-        const todo = await TodoModel.findByIdAndUpdate(id, { title, detail });
+        const todo = await TodoModel.findByIdAndUpdate(req.params.id, { title, detail }).lean();
         if (!todo) {
             res.status(404);
             throw new Error('Does not exists.');
         }
         return res.send({ message: 'Updated', status: 'success' });
     } catch (error) {
-        if (error instanceof CastError) {
-            res.status(400);
-            error.fullMessage = error.message;
-            error.message = 'Invalid ID';
-        }
         return next(error);
     }
 });
@@ -110,7 +87,7 @@ router.post('/', validateReqBody(todoSchema), async (req, res, next) => {
             detail,
             userId: req.user._id,
         });
-        res.send({ message: 'Todo Added', status: 'success' });
+        res.send({ message: 'Added', status: 'success' });
     } catch (error) {
         next(error);
     }
