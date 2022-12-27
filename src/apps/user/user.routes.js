@@ -1,13 +1,17 @@
-const express = require('express');
+const { Router } = require('express');
 
+const { sendSuccessResponse } = require('../../shared/utils');
 const { getUserById } = require('./user.controllers');
 
-const router = express.Router();
+const router = Router();
 
-router.get('/', async (req, res) => {
-    const { _id: id } = req.user;
-    const user = await getUserById(id);
-    res.send({ data: user });
+router.get('/', async (req, res, next) => {
+    try {
+        const user = await getUserById(req.user._id);
+        return res.send(sendSuccessResponse(user));
+    } catch (error) {
+        return next(error);
+    }
 });
 
 module.exports = router;

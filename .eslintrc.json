@@ -12,6 +12,8 @@
     "rules": {
         "indent": 0,
         "comma-dangle": 0,
-        "no-console": "off"
+        "no-console": "off",
+        "newline-per-chained-call": "off", // TODO: Check for this in Prettier
+        "no-underscore-dangle": "off"
     }
 }
